@@ -1,0 +1,31 @@
+<% layout('layouts/boilerplate') %>
+<section class="page-heading">
+  <div>
+    <h1>Welcome to ApnaStay</h1>
+    <p>Find your perfect stay with us!</p>
+  </div>
+  <!-- <a class="btn" href="/listings/new">Create New Listing</a> -->
+</section>
+
+<ul class="listing-grid">
+  <% allListings.forEach(listing => { %>
+    <li class="listing-card">
+      <a href="/listings/<%= listing._id %>">
+        <img
+          src="<%= listing.image.url %>"
+          alt="<%= listing.title %>"
+        >
+      </a>
+
+      <div class="listing-card-body">
+        <h2>
+          <a href="/listings/<%= listing._id %>"><%= listing.title %></a>
+        </h2>
+
+        <p><%= listing.description %></p>
+        <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> per night</p>
+        <p class="muted"><%= listing.location %>, <%= listing.country %></p>
+      </div>
+    </li>
+  <% }) %>
+</ul>

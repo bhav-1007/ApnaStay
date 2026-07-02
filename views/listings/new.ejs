@@ -1,0 +1,38 @@
+<% layout('layouts/boilerplate') %>
+<section class="form-panel">
+  <h1>Create New Listing</h1>
+
+  <form method="POST" action="/listings">
+    <label>
+      Title
+      <input type="text" name="listing[title]" placeholder="Title" required>
+    </label>
+
+    <label>
+      Description
+      <input type="text" name="listing[description]" placeholder="Description" required>
+    </label>
+
+    <label>
+      Image URL
+      <input type="text" name="listing[image][url]" placeholder="Image URL">
+    </label>
+
+    <label>
+      Price
+      <input type="number" name="listing[price]" placeholder="Price" required>
+    </label>
+
+    <label>
+      Location
+      <input type="text" name="listing[location]" placeholder="Location" required>
+    </label>
+
+    <label>
+      Country
+      <input type="text" name="listing[country]" placeholder="Country" required>
+    </label>
+
+    <button class="btn" type="submit">Create Listing</button>
+  </form>
+</section>
