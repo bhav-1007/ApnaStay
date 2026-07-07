@@ -1,38 +1,90 @@
 <% layout('layouts/boilerplate') %>
-<section class="form-panel">
-  <h1>Create New Listing</h1>
 
-  <form method="POST" action="/listings">
-    <label>
-      Title
-      <input type="text" name="listing[title]" placeholder="Title" required>
-    </label>
+<section class="container mt-4">
+  <div class="row">
+    <div class="col-8 offset-2">
+      <h1 class="mb-4">Create New Listing</h1>
 
-    <label>
-      Description
-      <input type="text" name="listing[description]" placeholder="Description" required>
-    </label>
+      <form method="POST" action="/listings" novalidate class="row g-3 needs-validation">
+        <div class="col-12">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            name="listing[title]"
+            id="title"
+            placeholder="Title"
+            class="form-control"
+            required
+          >
+          <div class="invalid-feedback">Please enter a title.</div>
+        </div>
 
-    <label>
-      Image URL
-      <input type="text" name="listing[image][url]" placeholder="Image URL">
-    </label>
+        <div class="col-12">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            name="listing[description]"
+            id="description"
+            placeholder="Description"
+            class="form-control"
+            required
+          ></textarea>
+          <div class="invalid-feedback">Please enter a description.</div>
+        </div>
 
-    <label>
-      Price
-      <input type="number" name="listing[price]" placeholder="Price" required>
-    </label>
+        <div class="col-12">
+          <label for="image" class="form-label">Image URL</label>
+          <input
+            type="text"
+            name="listing[image][url]"
+            id="image"
+            placeholder="Image URL"
+            class="form-control"
+          >
+        </div>
 
-    <label>
-      Location
-      <input type="text" name="listing[location]" placeholder="Location" required>
-    </label>
+        <div class="col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input
+            type="number"
+            name="listing[price]"
+            id="price"
+            placeholder="Price"
+            class="form-control"
+            required
+          >
+          <div class="invalid-feedback">Please enter a valid price.</div>
+        </div>
 
-    <label>
-      Country
-      <input type="text" name="listing[country]" placeholder="Country" required>
-    </label>
+        <div class="col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input
+            type="text"
+            name="listing[country]"
+            id="country"
+            placeholder="Country"
+            class="form-control"
+            required
+          >
+          <div class="invalid-feedback">Please enter a country.</div>
+        </div>
 
-    <button class="btn" type="submit">Create Listing</button>
-  </form>
+        <div class="col-12">
+          <label for="location" class="form-label">Location</label>
+          <input
+            type="text"
+            name="listing[location]"
+            id="location"
+            placeholder="Location"
+            class="form-control"
+            required
+          >
+          <div class="invalid-feedback">Please enter a location.</div>
+        </div>
+
+        <div class="col-12">
+          <button class="btn btn-primary" type="submit">Create Listing</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </section>
