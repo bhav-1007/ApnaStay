@@ -504,15 +504,15 @@ textarea:focus {
 }
 
 .show-content {
-  position: sticky;
-  top: 92px;
   padding: 30px;
   background: var(--surface);
   border: 2px solid var(--ink);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  position: relative;
+  position: sticky;
+  top: 92px;
   overflow: hidden;
+  align-self: start;
 }
 
 .show-content::before {
@@ -703,4 +703,116 @@ footer {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* ── STAR RATING ── */
+.star-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 6px;
+  font-size: 1.25rem;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  color: var(--line);
+  cursor: pointer;
+  transition: color 140ms ease, transform 140ms ease;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: var(--pop);
+}
+
+.star-rating input:checked ~ label {
+  color: var(--pop);
+}
+
+/* ── REVIEW SECTION ── */
+.review-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 2px dashed var(--line);
+}
+
+.review-section h3 {
+  margin: 0 0 14px;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.review-form {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.form-group {
+  display: grid;
+  gap: 7px;
+}
+
+.form-group label {
+  display: block;
+  color: var(--ink);
+  font-size: 0.93rem;
+  font-weight: 700;
+}
+
+.reviews-list {
+  display: grid;
+  gap: 14px;
+}
+
+.review-card {
+  padding: 16px;
+  background: var(--surface-soft);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.review-rating {
+  margin: 0 0 6px;
+  color: var(--pop);
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+.review-comment {
+  margin: 0 0 10px;
+  color: var(--text-soft);
+}
+
+.btn.danger.small {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 0.82rem;
+}
+
+.review-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.review-author {
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.review-date {
+  color: var(--muted);
+  font-size: 0.82rem;
 }

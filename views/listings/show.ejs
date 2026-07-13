@@ -7,7 +7,7 @@
 
     <div class="show-content">
         <h1><%= listing.title %></h1>
-    <p><%= listing.description %></p>
+        <p><%= listing.description %></p>
         <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> per night</p>
         <p class="muted"><%= listing.location %>, <%= listing.country %></p>
 
@@ -18,6 +18,76 @@
                 <button class="btn danger" type="submit">Delete this listing</button>
             </form>
         </div>
+
+        <hr>
+
+        <div class="review-section">
+    <h3>Leave a Review</h3>
+    <form method="POST" action="/listings/<%= listing._id %>/reviews" class="review-form">
+        <div class="star-rating">
+            <input type="radio" id="star5" name="review[rating]" value="5">
+            <label for="star5">&#9733;</label>
+            <input type="radio" id="star4" name="review[rating]" value="4">
+            <label for="star4">&#9733;</label>
+            <input type="radio" id="star3" name="review[rating]" value="3">
+            <label for="star3">&#9733;</label>
+            <input type="radio" id="star2" name="review[rating]" value="2">
+            <label for="star2">&#9733;</label>
+            <input type="radio" id="star1" name="review[rating]" value="1">
+            <label for="star1">&#9733;</label>
+        </div>
+
+        <div class="form-group">
+            <label for="author">Your Name</label>
+            <input
+                type="text"
+                id="author"
+                name="review[author]"
+                placeholder="Enter your name"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea
+                id="comment"
+                name="review[comment]"
+                rows="3"
+                placeholder="Share your experience..."
+            ></textarea>
+        </div>
+
+        <button class="btn" type="submit">Submit Review</button>
+    </form>
+
+    <h3>All Reviews</h3>
+    <% if (listing.reviews && listing.reviews.length > 0) { %>
+        <div class="reviews-list">
+            <% listing.reviews.forEach(review => { %>
+                <div class="review-card">
+                    <div class="review-meta">
+                        <span class="review-author"><%= review.author %></span>
+                        <span class="review-date">
+                            <%= review.createdAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                        </span>
+                    </div>
+                    <p class="review-rating">
+                        <% for (let i = 0; i < review.rating; i++) { %>&#9733;<% } %>
+                        <% for (let i = review.rating; i < 5; i++) { %>&#9734;<% } %>
+                    </p>
+                    <p class="review-comment"><%= review.comment %></p>
+
+                    <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                        <button class="btn danger small" type="submit">Delete</button>
+                    </form>
+                </div>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <p class="muted">No reviews yet. Be the first to review this listing!</p>
+    <% } %>
+</div>
 
         <a class="text-link" href="/listings">Back to all listings</a>
     </div>
