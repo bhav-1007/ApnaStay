@@ -13,3 +13,16 @@
         }, false)
     })
 })()
+
+document.addEventListener("DOMContentLoaded", () => {
+  const flashMessages = document.querySelectorAll(".flash-message");
+
+  flashMessages.forEach((flash) => {
+    setTimeout(() => {
+      flash.classList.add("flash-hide");
+      setTimeout(() => {
+        flash.remove();
+      }, 400); // matches the fade-out transition duration below
+    }, 5000); // 5 seconds
+  });
+});

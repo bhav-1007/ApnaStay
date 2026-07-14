@@ -816,3 +816,28 @@ footer {
   color: var(--muted);
   font-size: 0.82rem;
 }
+
+.flash-message {
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  border-radius: var(--radius);
+  border: 2px solid var(--ink);
+  font-weight: 700;
+  transition: opacity 400ms ease, transform 400ms ease;
+  opacity: 1;
+}
+
+.flash-message.flash-hide {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.flash-success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.flash-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
