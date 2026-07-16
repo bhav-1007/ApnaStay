@@ -166,6 +166,20 @@ textarea {
   display: none;
 }
 
+.apna-navbar .nav-cta-secondary {
+  background: var(--surface);
+  color: var(--ink) !important;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.apna-navbar .nav-cta-secondary:hover,
+.apna-navbar .nav-cta-secondary:focus {
+  background: var(--ink);
+  color: #ffffff !important;
+  box-shadow: 5px 5px 0 var(--brand);
+}
+
 .nav-toggle {
   width: 44px;
   height: 44px;
@@ -528,10 +542,27 @@ textarea:focus {
 .show-content h1 {
   font-size: 2.4rem;
   letter-spacing: -0.03em;
+  margin-bottom: 12px;
 }
 
 .show-content p {
   margin: 13px 0;
+}
+
+.show-content .description {
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.show-content .price-unit {
+  font-weight: 500;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+.show-content .muted i {
+  color: var(--muted);
+  margin-right: 4px;
 }
 
 .actions {
@@ -545,6 +576,50 @@ textarea:focus {
 
 .actions form {
   margin: 0;
+}
+
+/* ── LISTING META STRIP ── */
+.listing-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 20px;
+  padding-bottom: 18px;
+  border-bottom: 2px dashed var(--line);
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--surface-soft);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+.meta-item i {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.meta-rating {
+  background: #fef3c7;
+  border-color: var(--pop);
+  color: var(--pop-dark);
+}
+
+.meta-rating i {
+  color: var(--pop);
+}
+
+.meta-rating-count {
+  font-weight: 500;
+  color: var(--pop-dark);
+  opacity: 0.8;
 }
 
 /* ── FOOTER ── */
@@ -817,6 +892,7 @@ footer {
   font-size: 0.82rem;
 }
 
+/* ── FLASH MESSAGES ── */
 .flash-message {
   padding: 14px 20px;
   margin-bottom: 20px;
@@ -840,4 +916,20 @@ footer {
 .flash-error {
   background: #fee2e2;
   color: #991b1b;
+}
+
+.review-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.review-actions form {
+  margin: 0;
+}
+
+.btn.small {
+  min-height: 34px;
+  padding: 0 14px;
+  font-size: 0.82rem;
 }
