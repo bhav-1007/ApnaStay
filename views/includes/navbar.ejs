@@ -18,8 +18,31 @@
           <a class="nav-link" href="/listings">All Listings</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-cta" href="/listings/new">Add New Listing</a>
+          <a class="nav-link" href="/listings/new">Add New Listing</a>
         </li>
+
+        <% if (currentUser) { %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-circle-user fa-lg"></i>
+              <span><%= currentUser.username %></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+              <li><a class="dropdown-item" href="/listings/my"><i class="fa-solid fa-list me-2"></i>My Listings</a></li>
+              <li><a class="dropdown-item" href="/listings/wishlist"><i class="fa-solid fa-heart me-2"></i>My Wishlist</a></li>
+              <li><a class="dropdown-item" href="/listings/trash"><i class="fa-solid fa-trash-can me-2"></i>Trash</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link nav-cta nav-cta-secondary" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-cta" href="/signup">Signup</a>
+          </li>
+        <% } %>
       </ul>
     </div>
   </div>
