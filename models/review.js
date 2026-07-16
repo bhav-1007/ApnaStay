@@ -7,6 +7,10 @@ const reviewSchema = new Schema({
         required: true,
         trim: true
     },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+    },
   comment: {
     type: String,
     },
