@@ -1,0 +1,28 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="page-heading">
+    <div>
+        <h1>My Listings</h1>
+        <p>Everything you've listed on ApnaStay.</p>
+    </div>
+</div>
+
+<% if (myListings.length > 0) { %>
+    <ul class="listing-grid">
+        <% myListings.forEach(listing => { %>
+            <li class="listing-card">
+                <a href="/listings/<%= listing._id %>">
+                    <img src="<%= listing.image.url %>" alt="<%= listing.title %>">
+                </a>
+                <div class="listing-card-body">
+                    <h2><a href="/listings/<%= listing._id %>"><%= listing.title %></a></h2>
+                    <p><%= listing.description %></p>
+                    <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> / night</p>
+                </div>
+            </li>
+        <% }) %>
+    </ul>
+<% } else { %>
+    <p class="muted">You haven't created any listings yet.</p>
+    <a class="btn" href="/listings/new">Create your first listing</a>
+<% } %>

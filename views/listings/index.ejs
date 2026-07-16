@@ -1,31 +1,61 @@
 <% layout('layouts/boilerplate') %>
-<section class="page-heading">
-  <div>
-    <h1>Welcome to ApnaStay</h1>
-    <p>Find your perfect stay with us!</p>
-  </div>
-  <!-- <a class="btn" href="/listings/new">Create New Listing</a> -->
-</section>
 
-<ul class="listing-grid">
-  <% allListings.forEach(listing => { %>
-    <li class="listing-card">
-      <a href="/listings/<%= listing._id %>">
-        <img
-          src="<%= listing.image.url %>"
-          alt="<%= listing.title %>"
-        >
-      </a>
+<div class="page-heading">
+    <div>
+        <h1>All Listings</h1>
+        <p>Find your perfect stay with us!</p>
 
-      <div class="listing-card-body">
-        <h2>
-          <a href="/listings/<%= listing._id %>"><%= listing.title %></a>
-        </h2>
+        <form method="GET" action="/listings" style="margin-top:18px;">
+            <div style="display:grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap:12px; align-items:end;">
+                <div>
+                    <label for="q">Search</label>
+                    <input type="text" id="q" name="q" placeholder="Title or location" value="<%= query.q || '' %>">
+                </div>
+                <div>
+                    <label for="country">Country</label>
+                    <input type="text" id="country" name="country" placeholder="e.g. India" value="<%= query.country || '' %>">
+                </div>
+                <div>
+                    <label for="minPrice">Min Price</label>
+                    <input type="number" id="minPrice" name="minPrice" placeholder="0" value="<%= query.minPrice || '' %>">
+                </div>
+                <div>
+                    <label for="maxPrice">Max Price</label>
+                    <input type="number" id="maxPrice" name="maxPrice" placeholder="Any" value="<%= query.maxPrice || '' %>">
+                </div>
+                <button class="btn" type="submit">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-        <p><%= listing.description %></p>
-        <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> per night</p>
-        <p class="muted"><%= listing.location %>, <%= listing.country %></p>
-      </div>
-    </li>
-  <% }) %>
-</ul>
+<% if (allListings.length > 0) { %>
+    <ul class="listing-grid">
+        <% allListings.forEach(listing => { %>
+            <li class="listing-card">
+                <a href="/listings/<%= listing._id %>">
+                    <img src="<%= listing.image.url %>" alt="<%= listing.title %>">
+                </a>
+                <div class="listing-card-body">
+                    <h2><a href="/listings/<%= listing._id %>"><%= listing.title %></a></h2>
+                    <p><%= listing.description %></p>
+                    <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> / night</p>
+                </div>
+            </li>
+        <% }) %>
+    </ul>
+
+    <% if (totalPages > 1) { %>
+        <div class="actions" style="justify-content:center; border-top:none; margin-top:30px;">
+            <% for (let p = 1; p <= totalPages; p++) { %>
+                <a class="btn <%= p === currentPage ? '' : 'danger' %>"
+                   style=<%= p === currentPage ? '' : 'background:var(--surface); color:var(--ink); box-shadow:3px 3px 0 var(--ink);' %>
+                   href="/listings?<%= new URLSearchParams({ ...query, page: p }).toString() %>">
+                    <%= p %>
+                </a>
+            <% } %>
+        </div>
+    <% } %>
+<% } else { %>
+    <p class="muted">No listings match your search.</p>
+<% } %>
