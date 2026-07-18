@@ -967,3 +967,246 @@ footer {
 .suggestion-item:hover {
   background: var(--surface-soft);
 }
+
+/* BOOKING AND DASHBOARD */
+.booking-panel {
+  display: grid;
+  gap: 16px;
+  margin-top: 22px;
+  padding: 18px;
+  background: var(--surface-soft);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.booking-panel h3 {
+  margin: 0 0 4px;
+  color: var(--ink);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.booking-form {
+  display: grid;
+  gap: 14px;
+}
+
+.booking-date-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.booking-list {
+  display: grid;
+  gap: 18px;
+}
+
+.booking-card {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  overflow: hidden;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.booking-card img {
+  width: 100%;
+  height: 100%;
+  min-height: 190px;
+  object-fit: cover;
+}
+
+.booking-card-body {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+}
+
+.booking-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.booking-card h2 {
+  margin: 0 0 6px;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.booking-card h2 a,
+.dashboard-table a,
+.dashboard-listings a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.booking-card h2 a:hover,
+.dashboard-table a:hover,
+.dashboard-listings a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.booking-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.booking-facts span,
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  padding: 7px 11px;
+  background: var(--surface-soft);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.status-pill {
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #065f46;
+  text-transform: capitalize;
+}
+
+.status-pill.cancelled {
+  background: #fee2e2;
+  border-color: var(--danger);
+  color: var(--danger-dark);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.stat-card,
+.dashboard-section {
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card {
+  display: grid;
+  gap: 8px;
+  padding: 22px;
+}
+
+.stat-card span {
+  color: var(--text-soft);
+  font-weight: 700;
+}
+
+.stat-card strong {
+  color: var(--ink);
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+.dashboard-section {
+  margin-top: 22px;
+  padding: 24px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.dashboard-listings {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.dashboard-listings li {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 2px dashed var(--line);
+}
+
+.dashboard-listings li:last-child {
+  border-bottom: none;
+}
+
+.dashboard-listings span {
+  color: var(--text-soft);
+  font-weight: 700;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.dashboard-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  padding: 13px 12px;
+  border-bottom: 2px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.dashboard-table th {
+  color: var(--ink);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.dashboard-table td {
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .booking-date-grid,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-card {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-card-head,
+  .section-heading,
+  .dashboard-listings li {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

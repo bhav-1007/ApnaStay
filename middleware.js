@@ -1,4 +1,5 @@
 const Listing = require("./models/listing.js");
+const Booking = require("./models/booking.js");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -27,5 +28,22 @@ module.exports.isOwner = async (req, res, next) => {
     req.flash("error", "You don't have permission to do that!");
     return res.redirect(`/listings/${id}`);
   }
+  next();
+};
+
+module.exports.isGuestOnBooking = async (req, res, next) => {
+  const { bookingId } = req.params;
+  const booking = await Booking.findById(bookingId);
+
+  if (!booking) {
+    req.flash("error", "Booking not found!");
+    return res.redirect("/bookings/my");
+  }
+
+  if (!booking.guest || !booking.guest.equals(req.user._id)) {
+    req.flash("error", "You don't have permission to do that!");
+    return res.redirect("/bookings/my");
+  }
+
   next();
 };

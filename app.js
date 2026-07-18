@@ -14,6 +14,8 @@ const Listing = require("./models/listing.js");
 const { reviewSchema } = require("./schema.js");
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
+const bookingRouter = require("./routes/booking.js");
+const dashboardRouter = require("./routes/dashboard.js");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
@@ -74,6 +76,8 @@ app.get("/", wrapAsync(homeController.renderHome));
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", bookingRouter);
+app.use("/", dashboardRouter);
 app.use("/", userRouter);
 
 app.all("*splat", (req, res, next) => {

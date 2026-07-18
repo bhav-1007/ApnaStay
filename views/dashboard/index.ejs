@@ -1,0 +1,87 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="page-heading">
+    <div>
+        <h1>Dashboard</h1>
+        <p>Track your listings, incoming bookings, and upcoming check-ins.</p>
+    </div>
+    <a class="btn" href="/listings/new">Add Listing</a>
+</div>
+
+<section class="stats-grid">
+    <div class="stat-card">
+        <span>Total Listings</span>
+        <strong><%= stats.totalListings %></strong>
+    </div>
+    <div class="stat-card">
+        <span>Total Bookings</span>
+        <strong><%= stats.totalBookings %></strong>
+    </div>
+    <div class="stat-card">
+        <span>Upcoming Check-ins</span>
+        <strong><%= stats.upcomingCheckIns %></strong>
+    </div>
+</section>
+
+<section class="dashboard-section">
+    <div class="section-heading">
+        <h2>Your Listings</h2>
+        <a class="text-link" href="/listings/my">Manage listings</a>
+    </div>
+
+    <% if (myListings.length > 0) { %>
+        <ul class="dashboard-listings">
+            <% myListings.forEach(listing => { %>
+                <li>
+                    <a href="/listings/<%= listing._id %>"><%= listing.title %></a>
+                    <span>&#8377; <%= listing.price.toLocaleString('en-IN') %> / night</span>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p class="muted">You have not listed any stays yet.</p>
+    <% } %>
+</section>
+
+<section class="dashboard-section">
+    <div class="section-heading">
+        <h2>Incoming Bookings</h2>
+    </div>
+
+    <% if (bookings.length > 0) { %>
+        <div class="table-wrap">
+            <table class="dashboard-table">
+                <thead>
+                    <tr>
+                        <th>Listing</th>
+                        <th>Guest</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Nights</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% bookings.forEach(booking => { %>
+                        <tr>
+                            <td>
+                                <% if (booking.listing) { %>
+                                    <a href="/listings/<%= booking.listing._id %>"><%= booking.listing.title %></a>
+                                <% } else { %>
+                                    Listing unavailable
+                                <% } %>
+                            </td>
+                            <td><%= booking.guest ? booking.guest.username : "Guest unavailable" %></td>
+                            <td><%= booking.checkIn.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
+                            <td><%= booking.checkOut.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
+                            <td><%= booking.totalNights %></td>
+                            <td>&#8377; <%= booking.totalPrice.toLocaleString('en-IN') %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } else { %>
+        <p class="muted">No confirmed bookings for your listings yet.</p>
+    <% } %>
+</section>

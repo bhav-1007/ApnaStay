@@ -78,6 +78,10 @@
             </form>
         <% } %>
 
+        <% if (!listing.deleted) { %>
+            <%- include("../bookings/new.ejs", { listing }) %>
+        <% } %>
+
         <% if (listing.deleted) { %>
             <div class="listing-meta" style="border-bottom:none; margin-bottom:0;">
                 <span class="meta-item" style="background:#fee2e2; border-color:var(--danger); color:var(--danger-dark);">
