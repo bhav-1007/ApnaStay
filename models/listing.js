@@ -11,16 +11,12 @@ const listingSchema = new Schema({
     required: true,
   },
   image: {
+    url : {
+      type: String,
+    },
     filename: {
       type: String,
-      default: "listingimage",
-    },
-    url: {
-      type: String,
-      default: "https://wallpaperaccess.com/full/8183887.jpg",
-      set: (v) =>
-        v === "" ? "https://wallpaperaccess.com/full/8183887.jpg" : v,
-    },
+    }
   },
   price: {
     type: Number,
@@ -52,6 +48,15 @@ const listingSchema = new Schema({
     type: Date,
     default: null,
   },
+  geometry: {
+  type: {
+    type: String,
+    enum: ["Point"],
+  },
+  coordinates: {
+    type: [Number], // [longitude, latitude]
+  },
+},
 });
 
 

@@ -3,101 +3,172 @@
 <section class="container mt-4">
   <div class="row">
     <div class="col-8 offset-2">
-      <h1 class="mb-4">Edit Listing</h1>
+      <div class="form-panel">
+        <h1>Edit Listing</h1>
 
-      <form
-        method="POST"
-        action="/listings/<%= listing._id %>?_method=PUT"
-        novalidate
-        class="row g-3 needs-validation"
-      >
-        <div class="col-12">
-          <label for="title" class="form-label">Title</label>
-          <input
-            type="text"
-            name="listing[title]"
-            id="title"
-            value="<%= listing.title %>"
-            placeholder="Title"
-            class="form-control"
-            required
-          >
-          <div class="invalid-feedback">Please enter a title.</div>
-        </div>
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" enctype="multipart/form-data">
+          <div>
+            <label for="title">Title</label>
+            <input type="text" id="title" name="listing[title]" value="<%= listing.title %>" placeholder="Title" required>
+          </div>
 
-        <div class="col-12">
-          <label for="description" class="form-label">Description</label>
-          <textarea
-            name="listing[description]"
-            id="description"
-            placeholder="Description"
-            class="form-control"
-            required
-          ><%= listing.description %></textarea>
-          <div class="invalid-feedback">Please enter a description.</div>
-        </div>
+          <div>
+            <label for="description">Description</label>
+            <textarea id="description" name="listing[description]" placeholder="Description" required><%= listing.description %></textarea>
+          </div>
 
-        <div class="col-12">
-          <label for="image" class="form-label">Image URL</label>
-          <input
-            type="text"
-            name="listing[image][url]"
-            id="image"
-            value="<%= listing.image.url %>"
-            placeholder="Image URL"
-            class="form-control"
-          >
-        </div>
+          <div>
+            <label class="form-label d-block">Current Image</label>
+            <img
+              src="<%= listing.image.url %>"
+              alt="Current listing image"
+              class="rounded mb-2"
+              style="max-width: 250px; max-height: 180px; object-fit: cover;"
+            >
+            <label for="image">Upload New Image (optional)</label>
+            <input type="file" id="image" name="listing[image]" accept="image/*">
+            <p class="muted" style="margin-top:4px;">Leave blank to keep the current image.</p>
+          </div>
 
-        <div class="col-md-4">
-          <label for="price" class="form-label">Price</label>
-          <input
-            type="number"
-            name="listing[price]"
-            id="price"
-            value="<%= listing.price %>"
-            placeholder="Price"
-            class="form-control"
-            required
-          >
-          <div class="invalid-feedback">Please enter a valid price.</div>
-        </div>
+          <div>
+            <label for="price">Price (per night)</label>
+            <input type="number" id="price" name="listing[price]" value="<%= listing.price %>" placeholder="Price" required min="0">
+          </div>
 
-        <div class="col-md-8">
-          <label for="country" class="form-label">Country</label>
-          <input
-            type="text"
-            name="listing[country]"
-            id="country"
-            value="<%= listing.country %>"
-            placeholder="Country"
-            class="form-control"
-            required
-          >
-          <div class="invalid-feedback">Please enter a country.</div>
-        </div>
+          <div style="position:relative;">
+            <label for="location-search">Location</label>
+            <input type="text" id="location-search" value="<%= listing.location %>" placeholder="Start typing an address or city..." autocomplete="off" required>
+            <div id="suggestions" class="location-suggestions"></div>
+            <p class="muted" id="location-confirm" style="margin-top:6px;">
+              <i class="fa-solid fa-circle-check"></i> Location confirmed: <span id="location-confirm-text"><%= listing.location %></span>
+            </p>
+          </div>
 
-        <div class="col-12">
-          <label for="location" class="form-label">Location</label>
-          <input
-            type="text"
-            name="listing[location]"
-            id="location"
-            value="<%= listing.location %>"
-            placeholder="Location"
-            class="form-control"
-            required
-          >
-          <div class="invalid-feedback">Please enter a location.</div>
-        </div>
+          <!-- Hidden fields actually submitted to the server, pre-filled with existing values -->
+          <input type="hidden" id="location" name="listing[location]" value="<%= listing.location %>">
+          <input type="hidden" id="country" name="listing[country]" value="<%= listing.country %>">
+          <input type="hidden" id="lat" name="listing[lat]" value="<%= listing.geometry && listing.geometry.coordinates ? listing.geometry.coordinates[1] : '' %>">
+          <input type="hidden" id="lng" name="listing[lng]" value="<%= listing.geometry && listing.geometry.coordinates ? listing.geometry.coordinates[0] : '' %>">
 
-        <div class="col-12">
-          <button class="btn btn-primary" type="submit">Update Listing</button>
-          <a class="btn btn-outline-secondary ms-2" href="/listings/<%= listing._id %>">
-            Back to listing
-          </a>
-        </div>
-      </form>
+          <% if (listing.geometry && listing.geometry.coordinates && listing.geometry.coordinates.length === 2) { %>
+          <div class="col-12" style="margin-top:12px;">
+            <label class="form-label d-block">Current Map Location</label>
+            <div id="map" style="height:250px; border-radius:var(--radius-lg); border:2px solid var(--ink);"></div>
+          </div>
+          <% } %>
+
+          <div class="col-12" style="margin-top:16px;">
+            <button class="btn" type="submit">Update Listing</button>
+            <a class="btn btn-outline-secondary ms-2" href="/listings/<%= listing._id %>">Back to listing</a>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </section>
+
+<% if (listing.geometry && listing.geometry.coordinates && listing.geometry.coordinates.length === 2) { %>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const coords = <%- JSON.stringify(listing.geometry.coordinates) %>; // [lng, lat]
+
+  if (Array.isArray(coords) && coords.length === 2) {
+    const map = L.map('map').setView([coords[1], coords[0]], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+
+    L.marker([coords[1], coords[0]])
+      .addTo(map)
+      .bindPopup("<%= listing.title %>");
+  } else {
+    console.error("Invalid coordinates for map:", coords);
+  }
+</script>
+<% } %>
+
+<script>
+  (function () {
+    const searchInput = document.getElementById('location-search');
+    const suggestionsBox = document.getElementById('suggestions');
+    const locationInput = document.getElementById('location');
+    const countryInput = document.getElementById('country');
+    const latInput = document.getElementById('lat');
+    const lngInput = document.getElementById('lng');
+    const confirmMsg = document.getElementById('location-confirm');
+    const confirmText = document.getElementById('location-confirm-text');
+
+    let debounceTimer;
+
+    searchInput.addEventListener('input', () => {
+      // typing again invalidates the previously confirmed selection
+      // (whether that was the original saved location or an earlier search result)
+      locationInput.value = '';
+      countryInput.value = '';
+      latInput.value = '';
+      lngInput.value = '';
+      confirmMsg.style.display = 'none';
+
+      clearTimeout(debounceTimer);
+      const query = searchInput.value.trim();
+      if (query.length < 3) {
+        suggestionsBox.innerHTML = '';
+        return;
+      }
+
+      debounceTimer = setTimeout(async () => {
+        try {
+          const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(query)}`;
+          const res = await fetch(url);
+          const data = await res.json();
+          renderSuggestions(data);
+        } catch (err) {
+          suggestionsBox.innerHTML = '<div class="suggestion-item muted">Search failed, try again.</div>';
+        }
+      }, 400);
+    });
+
+    function renderSuggestions(results) {
+      suggestionsBox.innerHTML = '';
+      if (!results.length) {
+        suggestionsBox.innerHTML = '<div class="suggestion-item muted">No matches found.</div>';
+        return;
+      }
+      results.forEach((place) => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.textContent = place.display_name;
+        item.addEventListener('click', () => {
+          searchInput.value = place.display_name;
+          locationInput.value = place.display_name;
+          countryInput.value = (place.address && place.address.country) || '';
+          latInput.value = place.lat;
+          lngInput.value = place.lon;
+          suggestionsBox.innerHTML = '';
+          confirmText.textContent = place.display_name;
+          confirmMsg.style.display = 'block';
+        });
+        suggestionsBox.appendChild(item);
+      });
+    }
+
+    // close suggestions if clicking elsewhere
+    document.addEventListener('click', (e) => {
+      if (!suggestionsBox.contains(e.target) && e.target !== searchInput) {
+        suggestionsBox.innerHTML = '';
+      }
+    });
+
+    // prevent submitting if the user started typing a new search
+    // but never picked a suggestion from the list
+    searchInput.closest('form').addEventListener('submit', (e) => {
+      if (!latInput.value || !lngInput.value) {
+        e.preventDefault();
+        alert('Please select a location from the suggestions list.');
+        searchInput.focus();
+      }
+    });
+  })();
+</script>

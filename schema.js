@@ -11,6 +11,8 @@ module.exports.listingSchema = Joi.object({
             url: Joi.string().allow("").optional(),
             filename: Joi.string().allow("").optional(),
         }).optional(),
+        lat: Joi.number().optional(),
+        lng: Joi.number().optional(),
     }).required(),
 });
 

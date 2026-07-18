@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -17,9 +20,10 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const userRouter = require("./routes/user.js");
+const homeController = require("./controllers/home.js");
 
 app.engine("ejs", ejsMate);
-const MONGO_URL = "mongodb://127.0.0.1:27017/ApnaStay";
+const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/ApnaStay";
 
 main()
   .then(() => {
@@ -40,7 +44,7 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const sessionOptions = {
-  secret: "thisshouldbeabettersecret!",
+  secret: process.env.SESSION_SECRET || "thisshouldbeabettersecret!",
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -66,9 +70,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => {
-  res.send("Hi, I am Groot");
-});
+app.get("/", wrapAsync(homeController.renderHome));
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);

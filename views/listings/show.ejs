@@ -1,4 +1,5 @@
 <% layout('layouts/boilerplate') %>
+
 <article class="show-page">
     <img class="show-image"
         src="<%= listing.image.url %>"
@@ -46,11 +47,33 @@
         <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> <span class="price-unit">per night</span></p>
         <p class="muted"><i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %></p>
 
+        <% if (listing.geometry && listing.geometry.coordinates && listing.geometry.coordinates.length === 2) { %>
+        <div class="listing-meta" style="display:block; margin-top:20px;">
+            <h3 style="margin:0 0 10px;">Where you'll be</h3>
+            <div id="map" style="height:300px; border-radius:var(--radius-lg); border:2px solid var(--ink);"></div>
+        </div>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script>
+            const coords = <%- JSON.stringify(listing.geometry.coordinates) %> ; // [lng, lat]
+            const map = L.map('map').setView([coords[1], coords[0]], 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+            }).addTo(map);
+
+            L.marker([coords[1], coords[0]])
+                .addTo(map)
+                .bindPopup("<%= listing.title %>")
+                .openPopup();
+        </script>
+        <% } %>
+
         <% if (currentUser) { %>
             <form method="POST" action="/listings/<%= listing._id %>/wishlist" style="margin:10px 0;">
                 <button class="btn <%= isWishlisted ? 'danger' : '' %>" type="submit">
                     <i class="fa-solid fa-heart"></i>
-                    <%= isWishlisted ? "Remove from Wishlist" : "Add to Wishlist" %>
+                    <%= isWishlisted ? " Remove from Wishlist" : " Add to Wishlist" %>
                 </button>
             </form>
         <% } %>

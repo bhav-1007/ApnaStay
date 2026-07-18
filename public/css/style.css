@@ -933,3 +933,37 @@ footer {
   padding: 0 14px;
   font-size: 0.82rem;
 }
+
+.leaflet-container img {
+  max-width: none !important;
+}
+
+.location-suggestions {
+  position: relative;
+  z-index: 10;
+  margin-top: 4px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.location-suggestions:empty {
+  border: none;
+}
+
+.suggestion-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: var(--surface-soft);
+}

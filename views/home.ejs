@@ -1,0 +1,179 @@
+<% layout('layouts/boilerplate') %>
+
+<section class="hero">
+  <h1 class="hero-title">Find your next stay, sorted.</h1>
+  <p class="hero-subtitle">Handpicked homes and stays, listed by real hosts on ApnaStay.</p>
+  <a class="btn hero-cta" href="/listings">Browse All Listings</a>
+</section>
+
+<% if (featuredListings && featuredListings.length > 0) { %>
+<section class="featured-section">
+  <h2 class="section-title">Recently Added</h2>
+  <div class="featured-grid">
+    <% featuredListings.forEach(listing => { %>
+      <a class="featured-card" href="/listings/<%= listing._id %>">
+        <img class="featured-image" src="<%= listing.image.url %>" alt="<%= listing.title %>">
+        <div class="featured-info">
+          <h3 class="featured-title"><%= listing.title %></h3>
+          <p class="featured-location"><i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %></p>
+          <p class="featured-price">&#8377; <%= listing.price.toLocaleString('en-IN') %> <span class="price-unit">per night</span></p>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+</section>
+<% } %>
+
+<section class="how-it-works">
+  <h2 class="section-title">How It Works</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <h3>Search</h3>
+      <p class="muted">Browse listings by location, price, and dates that fit your trip.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <h3>Book</h3>
+      <p class="muted">Pick a place you love and reach out directly to the host.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <h3>Stay</h3>
+      <p class="muted">Check in, enjoy your stay, and leave a review for the next guest.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 64px 20px 48px;
+    background: var(--surface-soft, var(--bg));
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 2.6rem;
+    color: var(--text);
+    margin: 0 0 12px;
+  }
+
+  .hero-subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin: 0 0 24px;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 40px 0 20px;
+    padding: 0 20px;
+  }
+
+  .featured-section,
+  .how-it-works {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 0 20px 40px;
+  }
+
+  .featured-card {
+    display: block;
+    background: var(--surface, #fff);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg, 12px);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .featured-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  }
+
+  .featured-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .featured-info {
+    padding: 14px 16px;
+  }
+
+  .featured-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: var(--text);
+  }
+
+  .featured-location {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+
+  .featured-price {
+    font-weight: 700;
+    margin: 0;
+    color: var(--brand, #ff4500);
+  }
+
+  .featured-price .price-unit {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0 20px 60px;
+  }
+
+  .step-card {
+    text-align: center;
+    padding: 24px 16px;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--brand, #ff4500);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    margin: 0 auto 12px;
+  }
+
+  .step-card h3 {
+    margin: 0 0 8px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+</style>
