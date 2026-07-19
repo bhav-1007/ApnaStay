@@ -2,25 +2,25 @@
 
 <div class="page-heading">
     <div>
-        <h1>Open Peak Shifts</h1>
-        <p>Find short, verified shifts near you or filter by city, role, and hourly pay.</p>
+        <h1>Welcome to ApnaStay</h1>
+        <p>Find your perfect stay with us!</p>
 
         <form method="GET" action="/listings" style="margin-top:18px;">
             <div style="display:grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap:12px; align-items:end;">
                 <div>
                     <label for="q">Search</label>
-                    <input type="text" id="q" name="q" placeholder="Role, business, or location" value="<%= query.q || '' %>">
+                    <input type="text" id="q" name="q" placeholder="Title or location" value="<%= query.q || '' %>">
                 </div>
                 <div>
-                    <label for="country">Market</label>
+                    <label for="country">Country</label>
                     <input type="text" id="country" name="country" placeholder="e.g. India" value="<%= query.country || '' %>">
                 </div>
                 <div>
-                    <label for="minPrice">Min hourly pay</label>
+                    <label for="minPrice">Min Price</label>
                     <input type="number" id="minPrice" name="minPrice" placeholder="0" value="<%= query.minPrice || '' %>">
                 </div>
                 <div>
-                    <label for="maxPrice">Max hourly pay</label>
+                    <label for="maxPrice">Max Price</label>
                     <input type="number" id="maxPrice" name="maxPrice" placeholder="Any" value="<%= query.maxPrice || '' %>">
                 </div>
                 <button class="btn" type="submit">Filter</button>
@@ -39,11 +39,7 @@
                 <div class="listing-card-body">
                     <h2><a href="/listings/<%= listing._id %>"><%= listing.title %></a></h2>
                     <p><%= listing.description %></p>
-                    <div class="listing-card-tags">
-                        <span><i class="fa-solid fa-briefcase"></i> <%= listing.roleType || "Peak-hour helper" %></span>
-                        <span><i class="fa-solid fa-users"></i> <%= listing.workersNeeded || 1 %> worker<%= (listing.workersNeeded || 1) !== 1 ? "s" : "" %></span>
-                    </div>
-                    <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> / hour</p>
+                    <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> / night</p>
                 </div>
             </li>
         <% }) %>
@@ -61,5 +57,5 @@
         </div>
     <% } %>
 <% } else { %>
-    <p class="muted">No shifts match your search.</p>
+    <p class="muted">No listings match your search.</p>
 <% } %>

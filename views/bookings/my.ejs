@@ -2,10 +2,10 @@
 
 <div class="page-heading">
     <div>
-        <h1>My Shifts</h1>
-        <p>Your confirmed and cancelled PeakShift work opportunities.</p>
+        <h1>My Bookings</h1>
+        <p>Your confirmed and cancelled ApnaStay reservations.</p>
     </div>
-    <a class="btn" href="/listings">Find a Shift</a>
+    <a class="btn" href="/listings">Find a Stay</a>
 </div>
 
 <% if (bookings.length > 0) { %>
@@ -24,7 +24,7 @@
                                 <% if (booking.listing) { %>
                                     <a href="/listings/<%= booking.listing._id %>"><%= booking.listing.title %></a>
                                 <% } else { %>
-                                    Shift unavailable
+                                    Listing unavailable
                                 <% } %>
                             </h2>
                             <% if (booking.listing) { %>
@@ -37,15 +37,15 @@
                     </div>
 
                     <div class="booking-facts">
-                        <span><i class="fa-solid fa-clock"></i> <%= booking.checkIn.toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) %></span>
-                        <span><i class="fa-solid fa-calendar-check"></i> <%= booking.checkOut.toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) %></span>
-                        <span><i class="fa-solid fa-business-time"></i> <%= booking.totalNights %> hour<%= booking.totalNights !== 1 ? "s" : "" %></span>
+                        <span><i class="fa-solid fa-calendar-day"></i> <%= booking.checkIn.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+                        <span><i class="fa-solid fa-calendar-check"></i> <%= booking.checkOut.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+                        <span><i class="fa-solid fa-moon"></i> <%= booking.totalNights %> night<%= booking.totalNights !== 1 ? "s" : "" %></span>
                         <span><i class="fa-solid fa-indian-rupee-sign"></i> <%= booking.totalPrice.toLocaleString('en-IN') %></span>
                     </div>
 
                     <% if (booking.status === "confirmed") { %>
                         <form method="POST" action="/bookings/<%= booking._id %>?_method=DELETE">
-                            <button class="btn danger small" type="submit">Cancel Shift</button>
+                            <button class="btn danger small" type="submit">Cancel Booking</button>
                         </form>
                     <% } %>
                 </div>
@@ -53,6 +53,6 @@
         <% }) %>
     </div>
 <% } else { %>
-    <p class="muted">You have not accepted any shifts yet.</p>
-    <a class="btn" href="/listings">Explore shifts</a>
+    <p class="muted">You do not have any bookings yet.</p>
+    <a class="btn" href="/listings">Explore listings</a>
 <% } %>

@@ -2,8 +2,8 @@
 
 <div class="page-heading">
     <div>
-        <h1>Watchlist</h1>
-        <p>Shifts you saved for later.</p>
+        <h1>My Wishlist</h1>
+        <p>Listings you've saved for later.</p>
     </div>
 </div>
 
@@ -17,12 +17,12 @@
                 <div class="listing-card-body">
                     <h2><a href="/listings/<%= listing._id %>"><%= listing.title %></a></h2>
                     <p><%= listing.description %></p>
-                    <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> / hour</p>
+                    <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> / night</p>
                 </div>
             </li>
         <% }) %>
     </ul>
 <% } else { %>
-    <p class="muted">Your watchlist is empty. Browse shifts and tap the heart to save them here.</p>
-    <a class="btn" href="/listings">Browse shifts</a>
+    <p class="muted">Your wishlist is empty. Browse listings and tap the heart to save them here.</p>
+    <a class="btn" href="/listings">Browse listings</a>
 <% } %>

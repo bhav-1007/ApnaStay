@@ -9,7 +9,7 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  folder: "PeakShift",
+  folder: "ApnaStay", // Replace with your desired folder name
   allowedFormats: ["jpg", "png", "jpeg"],
 });
 

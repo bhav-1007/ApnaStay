@@ -2,60 +2,27 @@
 
 <section class="container mt-4">
   <div class="form-panel">
-        <h1>Post a Peak Shift</h1>
+    <h1>Create New Listing</h1>
 
     <form method="POST" action="/listings" enctype="multipart/form-data">
       <div>
-            <label for="title">Shift title</label>
-            <input type="text" id="title" name="listing[title]" placeholder="Cloud kitchen dinner rush" required>
+        <label for="title">Title</label>
+        <input type="text" id="title" name="listing[title]" placeholder="Title" required>
       </div>
 
       <div>
-            <label for="description">Shift details</label>
-            <textarea id="description" name="listing[description]" placeholder="Describe the work, reporting instructions, required experience, and payout details." required></textarea>
+        <label for="description">Description</label>
+        <textarea id="description" name="listing[description]" placeholder="Description" required></textarea>
       </div>
 
       <div>
-        <label for="roleType">Role type</label>
-        <input type="text" id="roleType" name="listing[roleType]" placeholder="Packer, helper cook, cashier, event crew">
-      </div>
-
-      <div class="booking-date-grid">
-        <div>
-          <label for="workersNeeded">Workers needed</label>
-          <input type="number" id="workersNeeded" name="listing[workersNeeded]" value="1" required min="1">
-        </div>
-        <div>
-          <label for="skillTags">Skill tags</label>
-          <input type="text" id="skillTags" name="listing[skillTags]" placeholder="packing, POS, cleaning">
-        </div>
-      </div>
-
-      <div class="booking-date-grid">
-        <div>
-          <label for="shiftDate">Shift date</label>
-          <input type="date" id="shiftDate" name="listing[shiftDate]">
-        </div>
-        <div class="booking-date-grid">
-          <label for="startTime">
-            Start
-            <input type="time" id="startTime" name="listing[startTime]">
-          </label>
-          <label for="endTime">
-            End
-            <input type="time" id="endTime" name="listing[endTime]">
-          </label>
-        </div>
-      </div>
-
-      <div>
-            <label for="image">Business or workplace image</label>
+        <label for="image">Upload Image</label>
         <input type="file" id="image" name="listing[image]" accept="image/*">
       </div>
 
       <div>
-            <label for="price">Hourly pay</label>
-            <input type="number" id="price" name="listing[price]" placeholder="150" required min="0">
+        <label for="price">Price (per night)</label>
+        <input type="number" id="price" name="listing[price]" placeholder="Price" required min="0">
       </div>
 
       <div style="position:relative;">
@@ -74,7 +41,7 @@
       <input type="hidden" id="lng" name="listing[lng]">
 
       <div class="col-12">
-        <button class="btn" type="submit">Post Shift</button>
+        <button class="btn" type="submit">Create Listing</button>
       </div>
     </form>
   </div>

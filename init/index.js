@@ -11,12 +11,12 @@ main()
   });
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/PeakShift');
+  await mongoose.connect('mongodb://127.0.0.1:27017/ApnaStay');
 }
 
 const initDB = async () => {
   await Listing.deleteMany({});
-  initData.data = initData.data.map((obj) => ({...obj, owner: "6a5c72f483e29a1f2149388d"}));
+  initData.data = initData.data.map((obj) => ({...obj, owner: "6a563cf834dd2b5db8f9b2ac"}));
   await Listing.insertMany(initData.data);
   console.log('Data was initialized');
 };

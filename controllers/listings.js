@@ -2,7 +2,6 @@ const Listing = require("../models/listing.js");
 const User = require("../models/user.js");
 const { cloudinary } = require("../cloudConfig.js");
 const geocodeLocation = require("../utils/geocode.js");
-const sampleData = require("../init/data.js");
 
 module.exports.index = async (req, res) => {
   const { q, minPrice, maxPrice, country, page = 1 } = req.query;
@@ -26,26 +25,13 @@ module.exports.index = async (req, res) => {
   }
 
   const currentPage = Math.max(1, parseInt(page) || 1);
-  let totalCount = 0;
-  let totalPages = 1;
-  let allListings = [];
+  const totalCount = await Listing.countDocuments(filter);
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
-  try {
-    totalCount = await Listing.countDocuments(filter);
-    totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-
-    allListings = await Listing.find(filter)
-      .sort({ createdAt: -1 })
-      .skip((currentPage - 1) * PAGE_SIZE)
-      .limit(PAGE_SIZE);
-  } catch (err) {
-    allListings = sampleData.data.map((listing, index) => ({
-      ...listing,
-      _id: `demo-${index + 1}`,
-    }));
-    totalCount = allListings.length;
-    totalPages = 1;
-  }
+  const allListings = await Listing.find(filter)
+    .sort({ createdAt: -1 })
+    .skip((currentPage - 1) * PAGE_SIZE)
+    .limit(PAGE_SIZE);
 
   res.render("listings/index.ejs", {
     allListings,
@@ -62,7 +48,6 @@ module.exports.renderNewForm = (req, res) => {
 module.exports.createListing = async (req, res) => {
   let url = req.file.path;
   let filename = req.file.filename;
-  normalizeShiftFields(req.body.listing);
   const newListing = new Listing(req.body.listing);
   newListing.owner = req.user._id;
   newListing.image = { url, filename };
@@ -85,7 +70,7 @@ module.exports.createListing = async (req, res) => {
   }
 
   await newListing.save();
-  req.flash("success", "Shift request posted successfully!");
+  req.flash("success", "Successfully made a new listing!");
   res.redirect(`/listings/${newListing._id}`);
 };
 
@@ -114,11 +99,11 @@ module.exports.toggleWishlist = async (req, res) => {
   if (index === -1) {
     user.wishlist.push(id);
     await user.save();
-    req.flash("success", "Shift saved to your watchlist!");
+    req.flash("success", "Added to your wishlist!");
   } else {
     user.wishlist.splice(index, 1);
     await user.save();
-    req.flash("success", "Shift removed from your watchlist.");
+    req.flash("success", "Removed from your wishlist.");
   }
   res.redirect(req.get("Referrer") || `/listings/${id}`);
 };
@@ -135,11 +120,11 @@ module.exports.renderEditForm = async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   if (!listing) {
-    req.flash("error", "Shift request does not exist!");
+    req.flash("error", "Listing you requested for does not exist!");
     return res.redirect("/listings");
   }
   if (listing.deleted) {
-    req.flash("error", "This shift is archived. Restore it before editing.");
+    req.flash("error", "This listing is in trash. Restore it before editing.");
     return res.redirect("/listings/trash");
   }
 
@@ -155,7 +140,7 @@ module.exports.updateListing = async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   if (!listing) {
-    req.flash("error", "Shift request you tried to update does not exist!");
+    req.flash("error", "Listing you tried to update does not exist!");
     return res.redirect("/listings");
   }
 
@@ -163,7 +148,6 @@ module.exports.updateListing = async (req, res) => {
     req.body.listing.location !== listing.location ||
     req.body.listing.country !== listing.country;
 
-  normalizeShiftFields(req.body.listing);
   Object.assign(listing, req.body.listing);
 
   const { lat, lng } = req.body.listing;
@@ -190,7 +174,7 @@ module.exports.updateListing = async (req, res) => {
   }
 
   await listing.save();
-  req.flash("success", "Shift request updated successfully!");
+  req.flash("success", "Listing updated successfully!");
   res.redirect(`/listings/${id}`);
 };
 
@@ -198,13 +182,13 @@ module.exports.destroyListing = async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   if (!listing) {
-    req.flash("error", "Shift request not found or already archived!");
+    req.flash("error", "Listing not found or already deleted!");
     return res.redirect("/listings");
   }
   listing.deleted = true;
   listing.deletedAt = new Date();
   await listing.save();
-  req.flash("success", "Shift moved to archive. Restore it anytime from Archive.");
+  req.flash("success", "Listing moved to trash. Restore it anytime from Trash.");
   res.redirect("/listings");
 };
 
@@ -212,7 +196,7 @@ module.exports.restoreListing = async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   if (!listing) {
-    req.flash("error", "Shift request not found!");
+    req.flash("error", "Listing not found!");
     return res.redirect("/listings/trash");
   }
   if (!listing.owner || !listing.owner.equals(req.user._id)) {
@@ -222,7 +206,7 @@ module.exports.restoreListing = async (req, res) => {
   listing.deleted = false;
   listing.deletedAt = null;
   await listing.save();
-  req.flash("success", "Shift request restored!");
+  req.flash("success", "Listing restored!");
   res.redirect(`/listings/${id}`);
 };
 
@@ -230,7 +214,7 @@ module.exports.permanentDestroy = async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   if (!listing) {
-    req.flash("error", "Shift request not found!");
+    req.flash("error", "Listing not found!");
     return res.redirect("/listings/trash");
   }
   if (!listing.owner || !listing.owner.equals(req.user._id)) {
@@ -238,47 +222,24 @@ module.exports.permanentDestroy = async (req, res) => {
     return res.redirect("/listings/trash");
   }
   await Listing.findByIdAndDelete(id); // triggers cascade review delete via post hook
-  req.flash("success", "Shift request permanently deleted.");
+  req.flash("success", "Listing permanently deleted.");
   res.redirect("/listings/trash");
 };
 
 module.exports.showListing = async (req, res) => {
   let { id } = req.params;
-  if (id.startsWith("demo-")) {
-    const index = Number(id.replace("demo-", "")) - 1;
-    const demoListing = sampleData.data[index];
-    if (!demoListing) {
-      req.flash("error", "Shift request does not exist!");
-      return res.redirect("/listings");
-    }
-    return res.render("listings/show.ejs", {
-      listing: {
-        ...demoListing,
-        _id: id,
-        reviews: [],
-        owner: {
-          username: "PeakShift Demo Business",
-          email: "business@peakshift.demo",
-          _id: { equals: () => false },
-        },
-        deleted: false,
-      },
-      isWishlisted: false,
-    });
-  }
-
   const listing = await Listing.findById(id).populate("reviews").populate("owner");
   if (!listing) {
-    req.flash("error", "Shift request does not exist!");
+    req.flash("error", "Listing you requested for does not exist!");
     return res.redirect("/listings");
   }
   if (listing.deleted) {
     const isOwnerViewing = req.user && listing.owner && listing.owner._id.equals(req.user._id);
     if (!isOwnerViewing) {
-      req.flash("error", "Shift request does not exist!");
+      req.flash("error", "Listing you requested for does not exist!");
       return res.redirect("/listings");
     }
-    req.flash("error", "This shift is archived. Restore it to make changes.");
+    req.flash("error", "This listing is in trash. Restore it to make changes.");
   }
 
   let isWishlisted = false;
@@ -289,15 +250,3 @@ module.exports.showListing = async (req, res) => {
 
   res.render("listings/show.ejs", { listing, isWishlisted });
 };
-
-function normalizeShiftFields(listing) {
-  if (!listing) return;
-  if (typeof listing.skillTags === "string") {
-    listing.skillTags = listing.skillTags
-      .split(",")
-      .map((tag) => tag.trim())
-      .filter(Boolean);
-  }
-  if (!listing.roleType) listing.roleType = "Peak-hour helper";
-  if (!listing.workersNeeded) listing.workersNeeded = 1;
-}

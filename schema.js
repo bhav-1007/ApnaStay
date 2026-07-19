@@ -5,15 +5,6 @@ module.exports.listingSchema = Joi.object({
         title: Joi.string().required(),
         description: Joi.string().required(),
         price: Joi.number().required().min(0),
-        roleType: Joi.string().allow("").optional(),
-        workersNeeded: Joi.number().integer().min(1).optional(),
-        shiftDate: Joi.date().optional(),
-        startTime: Joi.string().allow("").optional(),
-        endTime: Joi.string().allow("").optional(),
-        skillTags: Joi.alternatives().try(
-            Joi.array().items(Joi.string().allow("")),
-            Joi.string().allow("")
-        ).optional(),
         location: Joi.string().required(),
         country: Joi.string().required(),
         image: Joi.object({

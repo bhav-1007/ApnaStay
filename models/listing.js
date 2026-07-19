@@ -22,28 +22,6 @@ const listingSchema = new Schema({
     type: Number,
     required: true,
   },
-  roleType: {
-    type: String,
-    default: "Peak-hour helper",
-  },
-  workersNeeded: {
-    type: Number,
-    default: 1,
-    min: 1,
-  },
-  shiftDate: {
-    type: Date,
-  },
-  startTime: {
-    type: String,
-  },
-  endTime: {
-    type: String,
-  },
-  skillTags: {
-    type: [String],
-    default: [],
-  },
   location: {
     type: String,
     required: true,
@@ -71,15 +49,15 @@ const listingSchema = new Schema({
     default: null,
   },
   geometry: {
-    type: {
-      type: String,
-      enum: ["Point"],
-    },
-    coordinates: {
-      type: [Number], // [longitude, latitude]
-    },
+  type: {
+    type: String,
+    enum: ["Point"],
   },
-}, { timestamps: true });
+  coordinates: {
+    type: [Number], // [longitude, latitude]
+  },
+},
+});
 
 
 const Review = require("./review.js");

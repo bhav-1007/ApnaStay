@@ -2,8 +2,8 @@
 
 <div class="page-heading">
     <div>
-        <h1>Archive</h1>
-        <p>Shift requests here can be restored or permanently deleted.</p>
+        <h1>Trash</h1>
+        <p>Listings here can be restored or permanently deleted.</p>
     </div>
 </div>
 
@@ -17,7 +17,7 @@
                 <div class="listing-card-body">
                     <h2><a href="/listings/<%= listing._id %>"><%= listing.title %></a></h2>
                     <p class="muted">
-                        Archived <%= listing.deletedAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                        Deleted <%= listing.deletedAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %>
                     </p>
 
                     <div class="actions">
@@ -33,7 +33,7 @@
         <% }) %>
     </ul>
 <% } else { %>
-    <p class="muted">Archive is empty.</p>
+    <p class="muted">Trash is empty.</p>
 <% } %>
 
-<a class="text-link" href="/listings">Back to open shifts</a>
+<a class="text-link" href="/listings">Back to all listings</a>

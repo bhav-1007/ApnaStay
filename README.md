@@ -1,10 +1,7 @@
-# PeakShift
-PeakShift is a mobile-first staffing marketplace built with Node.js, Express, MongoDB, and EJS. It helps businesses post short peak-hour shifts and lets verified workers discover, save, accept, and track nearby earning opportunities.
+# ApnaStay
+ApnaStay is a hotel and stay booking web application built with Node.js, Express, MongoDB, and EJS. It allows users to browse stay listings and is designed as a full-stack project to practice backend routing, database models, templating, and web application structure.
 ## Features
-- Browse short, hourly shift requests
-- Post shift requests with role, worker count, timing, skill tags, and location
-- Accept shifts with start and end times
-- Track accepted shifts, payouts, and business-side staffing activity
+- Browse stay/hotel listings
 - Server-side rendering using EJS
 - Express.js backend with structured routes
 - MongoDB/Mongoose-based data models
@@ -20,7 +17,7 @@ PeakShift is a mobile-first staffing marketplace built with Node.js, Express, Mo
 - CSS
 - JavaScript
 ## Project Structure
-PeakShift/
+ApnaStay/
 ├── app.js
 ├── models/
 ├── views/
