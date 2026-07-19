@@ -1,5 +1,5 @@
 # ApnaStay
-ApnaStay is a hotel and stay booking web application built with Node.js, Express, MongoDB, and EJS. It allows users to browse stay listings and is designed as a full-stack project to practice backend routing, database models, templating, and web application structure.
+ApnaStay is a hotel and room booking web application built with Node.js, Express, MongoDB, and EJS. It allows users to browse stay listings and is designed as a full-stack project to practice backend routing, database models, templating, and web application structure.
 ## Features
 - Browse stay/hotel listings
 - Server-side rendering using EJS
