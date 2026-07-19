@@ -1,17 +1,12 @@
 const Booking = require("../models/booking.js");
 const Listing = require("../models/listing.js");
 
-const DAY_MS = 1000 * 60 * 60 * 24;
+const HOUR_MS = 1000 * 60 * 60;
 
-function parseDateOnly(value) {
+function parseDateTime(value) {
   if (!value) return null;
-  const date = new Date(`${value}T00:00:00.000Z`);
+  const date = new Date(value);
   return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function startOfTodayUtc() {
-  const now = new Date();
-  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 }
 
 module.exports.createBooking = async (req, res) => {
@@ -19,51 +14,63 @@ module.exports.createBooking = async (req, res) => {
   const listing = await Listing.findById(id);
 
   if (!listing) {
-    req.flash("error", "Listing you tried to book does not exist!");
+    req.flash("error", "Shift request does not exist!");
     return res.redirect("/listings");
   }
 
   if (listing.deleted) {
-    req.flash("error", "This listing is not available for booking.");
+    req.flash("error", "This shift is not available.");
     return res.redirect("/listings");
   }
 
   if (listing.owner && listing.owner.equals(req.user._id)) {
-    req.flash("error", "You cannot book your own listing.");
+    req.flash("error", "You cannot accept your own shift request.");
     return res.redirect(`/listings/${id}`);
   }
 
-  const checkIn = parseDateOnly(req.body.checkIn);
-  const checkOut = parseDateOnly(req.body.checkOut);
+  const checkIn = parseDateTime(req.body.startAt || req.body.checkIn);
+  const checkOut = parseDateTime(req.body.endAt || req.body.checkOut);
 
   if (!checkIn || !checkOut) {
-    req.flash("error", "Please choose valid check-in and check-out dates.");
+    req.flash("error", "Please choose valid shift start and end times.");
     return res.redirect(`/listings/${id}`);
   }
 
-  if (checkIn < startOfTodayUtc()) {
-    req.flash("error", "Check-in cannot be in the past.");
+  if (checkIn < new Date()) {
+    req.flash("error", "Shift start time cannot be in the past.");
     return res.redirect(`/listings/${id}`);
   }
 
   if (checkOut <= checkIn) {
-    req.flash("error", "Check-out must be after check-in.");
+    req.flash("error", "Shift end time must be after the start time.");
     return res.redirect(`/listings/${id}`);
   }
 
-  const conflict = await Booking.findOne({
+  const workerConflict = await Booking.findOne({
+    guest: req.user._id,
+    status: "confirmed",
+    checkIn: { $lt: checkOut },
+    checkOut: { $gt: checkIn },
+  });
+
+  if (workerConflict) {
+    req.flash("error", "You already accepted an overlapping shift. Please choose another window.");
+    return res.redirect(`/listings/${id}`);
+  }
+
+  const acceptedCount = await Booking.countDocuments({
     listing: id,
     status: "confirmed",
     checkIn: { $lt: checkOut },
     checkOut: { $gt: checkIn },
   });
 
-  if (conflict) {
-    req.flash("error", "Those dates are already booked. Please choose another stay window.");
+  if (acceptedCount >= (listing.workersNeeded || 1)) {
+    req.flash("error", "This shift is already fully staffed.");
     return res.redirect(`/listings/${id}`);
   }
 
-  const totalNights = Math.round((checkOut - checkIn) / DAY_MS);
+  const totalNights = Math.max(1, Math.round((checkOut - checkIn) / HOUR_MS));
   const totalPrice = totalNights * listing.price;
 
   await Booking.create({
@@ -75,7 +82,7 @@ module.exports.createBooking = async (req, res) => {
     totalPrice,
   });
 
-  req.flash("success", "Your stay is confirmed!");
+  req.flash("success", "Shift accepted. Check-in and payment details are ready.");
   res.redirect("/bookings/my");
 };
 
@@ -92,6 +99,6 @@ module.exports.cancelBooking = async (req, res) => {
   booking.status = "cancelled";
   await booking.save();
 
-  req.flash("success", "Booking cancelled.");
+  req.flash("success", "Shift acceptance cancelled.");
   res.redirect("/bookings/my");
 };

@@ -21,7 +21,7 @@ module.exports.isOwner = async (req, res, next) => {
   let { id } = req.params;
   let listing = await Listing.findById(id);
   if (!listing) {
-    req.flash("error", "Listing not found!");
+    req.flash("error", "Shift request not found!");
     return res.redirect("/listings");
   }
   if (!listing.owner || !listing.owner.equals(req.user._id)) {
@@ -36,7 +36,7 @@ module.exports.isGuestOnBooking = async (req, res, next) => {
   const booking = await Booking.findById(bookingId);
 
   if (!booking) {
-    req.flash("error", "Booking not found!");
+    req.flash("error", "Shift acceptance not found!");
     return res.redirect("/bookings/my");
   }
 

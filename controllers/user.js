@@ -11,7 +11,7 @@ module.exports.signup = async (req, res, next) => {
     const registeredUser = await User.register(newUser, password);
     req.login(registeredUser, (err) => {
       if (err) return next(err);
-      req.flash("success", "Welcome to ApnaStay!");
+      req.flash("success", "Welcome to PeakShift!");
       res.redirect("/listings");
     });
   } catch (e) {

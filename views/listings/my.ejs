@@ -2,8 +2,8 @@
 
 <div class="page-heading">
     <div>
-        <h1>My Listings</h1>
-        <p>Everything you've listed on ApnaStay.</p>
+        <h1>My Shift Requests</h1>
+        <p>All peak-hour staffing requests posted by your business.</p>
     </div>
 </div>
 
@@ -17,12 +17,12 @@
                 <div class="listing-card-body">
                     <h2><a href="/listings/<%= listing._id %>"><%= listing.title %></a></h2>
                     <p><%= listing.description %></p>
-                    <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> / night</p>
+                    <p class="price">&#8377; <%= listing.price.toLocaleString('en-IN') %> / hour</p>
                 </div>
             </li>
         <% }) %>
     </ul>
 <% } else { %>
-    <p class="muted">You haven't created any listings yet.</p>
-    <a class="btn" href="/listings/new">Create your first listing</a>
+    <p class="muted">You have not posted any shifts yet.</p>
+    <a class="btn" href="/listings/new">Post your first shift</a>
 <% } %>

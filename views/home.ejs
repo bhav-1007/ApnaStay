@@ -1,14 +1,36 @@
 <% layout('layouts/boilerplate') %>
 
-<section class="hero">
-  <h1 class="hero-title">Find your next stay, sorted.</h1>
-  <p class="hero-subtitle">Handpicked homes and stays, listed by real hosts on ApnaStay.</p>
-  <a class="btn hero-cta" href="/listings">Browse All Listings</a>
+<section class="hero peak-hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Real-time staffing for peak-hour demand</p>
+    <h1 class="hero-title">Making labor as flexible as demand itself.</h1>
+    <p class="hero-subtitle">PeakShift connects businesses that need extra hands for 2-4 hour rushes with verified workers looking for flexible earning opportunities.</p>
+    <div class="hero-actions">
+      <a class="btn hero-cta" href="/listings">Find Open Shifts</a>
+      <a class="btn secondary" href="/listings/new">Post a Shift</a>
+    </div>
+  </div>
+  <div class="hero-panel" aria-label="Live staffing preview">
+    <div class="live-shift-card">
+      <span class="status-pill">Live match</span>
+      <h2>Cloud kitchen dinner rush</h2>
+      <p>2 packers and 1 helper needed from 7 PM-10 PM near Indiranagar.</p>
+      <div class="shift-metrics">
+        <span><strong>15</strong> matched workers</span>
+        <span><strong>3 km</strong> radius</span>
+        <span><strong>&#8377;150</strong> / hour</span>
+      </div>
+    </div>
+  </div>
 </section>
 
-<% if (featuredListings && featuredListings.length > 0) { %>
 <section class="featured-section">
-  <h2 class="section-title">Recently Added</h2>
+  <div class="section-heading-inline">
+    <h2 class="section-title">Open Peak Shifts</h2>
+    <a class="text-link" href="/listings">Browse all</a>
+  </div>
+
+  <% if (featuredListings && featuredListings.length > 0) { %>
   <div class="featured-grid">
     <% featuredListings.forEach(listing => { %>
       <a class="featured-card" href="/listings/<%= listing._id %>">
@@ -16,164 +38,45 @@
         <div class="featured-info">
           <h3 class="featured-title"><%= listing.title %></h3>
           <p class="featured-location"><i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %></p>
-          <p class="featured-price">&#8377; <%= listing.price.toLocaleString('en-IN') %> <span class="price-unit">per night</span></p>
+          <p class="featured-price">&#8377; <%= listing.price.toLocaleString('en-IN') %> <span class="price-unit">per hour</span></p>
         </div>
       </a>
     <% }) %>
   </div>
+  <% } else { %>
+    <p class="muted" style="padding:0 20px 28px;">No shifts are live yet. Post the first peak-hour request.</p>
+  <% } %>
 </section>
-<% } %>
 
 <section class="how-it-works">
-  <h2 class="section-title">How It Works</h2>
+  <h2 class="section-title">How PeakShift Works</h2>
   <div class="steps-grid">
     <div class="step-card">
       <div class="step-number">1</div>
-      <h3>Search</h3>
-      <p class="muted">Browse listings by location, price, and dates that fit your trip.</p>
+      <h3>Create a shift</h3>
+      <p class="muted">Businesses post role, location, pay, timing, and worker count for a short demand spike.</p>
     </div>
     <div class="step-card">
       <div class="step-number">2</div>
-      <h3>Book</h3>
-      <p class="muted">Pick a place you love and reach out directly to the host.</p>
+      <h3>Match verified workers</h3>
+      <p class="muted">Workers discover nearby opportunities by availability, skill tags, and trust history.</p>
     </div>
     <div class="step-card">
       <div class="step-number">3</div>
-      <h3>Stay</h3>
-      <p class="muted">Check in, enjoy your stay, and leave a review for the next guest.</p>
+      <h3>Check in and get paid</h3>
+      <p class="muted">GPS and selfie check-in confirm attendance before automatic post-shift settlement.</p>
     </div>
   </div>
 </section>
 
-<style>
-  .hero {
-    text-align: center;
-    padding: 64px 20px 48px;
-    background: var(--surface-soft, var(--bg));
-    border-bottom: 1px solid var(--line);
-  }
-
-  .hero-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 800;
-    font-size: 2.6rem;
-    color: var(--text);
-    margin: 0 0 12px;
-  }
-
-  .hero-subtitle {
-    color: var(--muted);
-    font-size: 1.1rem;
-    margin: 0 0 24px;
-  }
-
-  .hero-cta {
-    display: inline-block;
-    padding: 12px 28px;
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  .section-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 1.5rem;
-    margin: 40px 0 20px;
-    padding: 0 20px;
-  }
-
-  .featured-section,
-  .how-it-works {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .featured-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    padding: 0 20px 40px;
-  }
-
-  .featured-card {
-    display: block;
-    background: var(--surface, #fff);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg, 12px);
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  .featured-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  }
-
-  .featured-image {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    display: block;
-  }
-
-  .featured-info {
-    padding: 14px 16px;
-  }
-
-  .featured-title {
-    font-size: 1rem;
-    font-weight: 700;
-    margin: 0 0 6px;
-    color: var(--text);
-  }
-
-  .featured-location {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin: 0 0 8px;
-  }
-
-  .featured-price {
-    font-weight: 700;
-    margin: 0;
-    color: var(--brand, #ff4500);
-  }
-
-  .featured-price .price-unit {
-    font-weight: 400;
-    color: var(--muted);
-    font-size: 0.85rem;
-  }
-
-  .steps-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 0 20px 60px;
-  }
-
-  .step-card {
-    text-align: center;
-    padding: 24px 16px;
-  }
-
-  .step-number {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--brand, #ff4500);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    margin: 0 auto 12px;
-  }
-
-  .step-card h3 {
-    margin: 0 0 8px;
-    font-family: 'Space Grotesk', sans-serif;
-  }
-</style>
+<section class="market-section">
+  <h2 class="section-title">Built for recurring local rushes</h2>
+  <div class="market-grid">
+    <span>Restaurants and QSRs</span>
+    <span>Cloud kitchens</span>
+    <span>Retail stores</span>
+    <span>Pharmacies</span>
+    <span>Multiplex cinemas</span>
+    <span>Events</span>
+  </div>
+</section>

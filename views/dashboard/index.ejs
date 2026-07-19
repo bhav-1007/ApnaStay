@@ -3,18 +3,18 @@
 <div class="page-heading">
     <div>
         <h1>Dashboard</h1>
-        <p>Track your listings, incoming bookings, and upcoming check-ins.</p>
+        <p>Track shift requests, accepted workers, fulfillment, and upcoming check-ins.</p>
     </div>
-    <a class="btn" href="/listings/new">Add Listing</a>
+    <a class="btn" href="/listings/new">Post Shift</a>
 </div>
 
 <section class="stats-grid">
     <div class="stat-card">
-        <span>Total Listings</span>
+        <span>Total Shift Requests</span>
         <strong><%= stats.totalListings %></strong>
     </div>
     <div class="stat-card">
-        <span>Total Bookings</span>
+        <span>Accepted Shifts</span>
         <strong><%= stats.totalBookings %></strong>
     </div>
     <div class="stat-card">
@@ -25,8 +25,8 @@
 
 <section class="dashboard-section">
     <div class="section-heading">
-        <h2>Your Listings</h2>
-        <a class="text-link" href="/listings/my">Manage listings</a>
+        <h2>Your Shift Requests</h2>
+        <a class="text-link" href="/listings/my">Manage shifts</a>
     </div>
 
     <% if (myListings.length > 0) { %>
@@ -34,18 +34,18 @@
             <% myListings.forEach(listing => { %>
                 <li>
                     <a href="/listings/<%= listing._id %>"><%= listing.title %></a>
-                    <span>&#8377; <%= listing.price.toLocaleString('en-IN') %> / night</span>
+                    <span>&#8377; <%= listing.price.toLocaleString('en-IN') %> / hour</span>
                 </li>
             <% }) %>
         </ul>
     <% } else { %>
-        <p class="muted">You have not listed any stays yet.</p>
+        <p class="muted">You have not posted any shifts yet.</p>
     <% } %>
 </section>
 
 <section class="dashboard-section">
     <div class="section-heading">
-        <h2>Incoming Bookings</h2>
+        <h2>Accepted Workers</h2>
     </div>
 
     <% if (bookings.length > 0) { %>
@@ -53,12 +53,12 @@
             <table class="dashboard-table">
                 <thead>
                     <tr>
-                        <th>Listing</th>
-                        <th>Guest</th>
-                        <th>Check-in</th>
-                        <th>Check-out</th>
-                        <th>Nights</th>
-                        <th>Total</th>
+                        <th>Shift</th>
+                        <th>Worker</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Hours</th>
+                        <th>Payout</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,12 +68,12 @@
                                 <% if (booking.listing) { %>
                                     <a href="/listings/<%= booking.listing._id %>"><%= booking.listing.title %></a>
                                 <% } else { %>
-                                    Listing unavailable
+                                    Shift unavailable
                                 <% } %>
                             </td>
-                            <td><%= booking.guest ? booking.guest.username : "Guest unavailable" %></td>
-                            <td><%= booking.checkIn.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
-                            <td><%= booking.checkOut.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
+                            <td><%= booking.guest ? booking.guest.username : "Worker unavailable" %></td>
+                            <td><%= booking.checkIn.toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) %></td>
+                            <td><%= booking.checkOut.toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) %></td>
                             <td><%= booking.totalNights %></td>
                             <td>&#8377; <%= booking.totalPrice.toLocaleString('en-IN') %></td>
                         </tr>
@@ -82,6 +82,6 @@
             </table>
         </div>
     <% } else { %>
-        <p class="muted">No confirmed bookings for your listings yet.</p>
+        <p class="muted">No workers have accepted your shifts yet.</p>
     <% } %>
 </section>

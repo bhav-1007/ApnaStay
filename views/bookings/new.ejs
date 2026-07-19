@@ -1,28 +1,28 @@
 <section class="booking-panel">
     <div>
-        <h3>Book this stay</h3>
-        <p class="muted">&#8377; <%= listing.price.toLocaleString('en-IN') %> per night, auto-confirmed instantly.</p>
+        <h3>Accept this shift</h3>
+        <p class="muted">&#8377; <%= listing.price.toLocaleString('en-IN') %> per hour, verified check-in and post-shift settlement.</p>
     </div>
 
     <% if (!currentUser) { %>
-        <a class="btn" href="/login">Login to Book</a>
+        <a class="btn" href="/login">Login to Accept</a>
     <% } else if (listing.owner && listing.owner._id.equals(currentUser._id)) { %>
-        <p class="muted">This is your listing, so guests will see booking options here.</p>
+        <p class="muted">This is your shift request, so workers will see acceptance options here.</p>
     <% } else { %>
         <form method="POST" action="/listings/<%= listing._id %>/bookings" class="booking-form">
             <div class="booking-date-grid">
-                <label for="checkIn">
-                    Check-in
-                    <input type="date" id="checkIn" name="checkIn" required>
+                <label for="startAt">
+                    Shift start
+                    <input type="datetime-local" id="startAt" name="startAt" required>
                 </label>
-                <label for="checkOut">
-                    Check-out
-                    <input type="date" id="checkOut" name="checkOut" required>
+                <label for="endAt">
+                    Shift end
+                    <input type="datetime-local" id="endAt" name="endAt" required>
                 </label>
             </div>
             <button class="btn" type="submit">
                 <i class="fa-solid fa-calendar-check"></i>
-                Confirm Booking
+                Accept Shift
             </button>
         </form>
     <% } %>

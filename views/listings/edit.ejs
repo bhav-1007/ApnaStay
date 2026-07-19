@@ -4,24 +4,57 @@
   <div class="row">
     <div class="col-8 offset-2">
       <div class="form-panel">
-        <h1>Edit Listing</h1>
+        <h1>Edit Shift Request</h1>
 
         <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" enctype="multipart/form-data">
           <div>
-            <label for="title">Title</label>
-            <input type="text" id="title" name="listing[title]" value="<%= listing.title %>" placeholder="Title" required>
+            <label for="title">Shift title</label>
+            <input type="text" id="title" name="listing[title]" value="<%= listing.title %>" placeholder="Cloud kitchen dinner rush" required>
           </div>
 
           <div>
-            <label for="description">Description</label>
-            <textarea id="description" name="listing[description]" placeholder="Description" required><%= listing.description %></textarea>
+            <label for="description">Shift details</label>
+            <textarea id="description" name="listing[description]" placeholder="Describe the work, reporting instructions, required experience, and payout details." required><%= listing.description %></textarea>
           </div>
 
           <div>
-            <label class="form-label d-block">Current Image</label>
+            <label for="roleType">Role type</label>
+            <input type="text" id="roleType" name="listing[roleType]" value="<%= listing.roleType || '' %>" placeholder="Packer, helper cook, cashier, event crew">
+          </div>
+
+          <div class="booking-date-grid">
+            <div>
+              <label for="workersNeeded">Workers needed</label>
+              <input type="number" id="workersNeeded" name="listing[workersNeeded]" value="<%= listing.workersNeeded || 1 %>" required min="1">
+            </div>
+            <div>
+              <label for="skillTags">Skill tags</label>
+              <input type="text" id="skillTags" name="listing[skillTags]" value="<%= listing.skillTags ? listing.skillTags.join(', ') : '' %>" placeholder="packing, POS, cleaning">
+            </div>
+          </div>
+
+          <div class="booking-date-grid">
+            <div>
+              <label for="shiftDate">Shift date</label>
+              <input type="date" id="shiftDate" name="listing[shiftDate]" value="<%= listing.shiftDate ? listing.shiftDate.toISOString().slice(0, 10) : '' %>">
+            </div>
+            <div class="booking-date-grid">
+              <label for="startTime">
+                Start
+                <input type="time" id="startTime" name="listing[startTime]" value="<%= listing.startTime || '' %>">
+              </label>
+              <label for="endTime">
+                End
+                <input type="time" id="endTime" name="listing[endTime]" value="<%= listing.endTime || '' %>">
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label d-block">Current workplace image</label>
             <img
               src="<%= listing.image.url %>"
-              alt="Current listing image"
+              alt="Current shift image"
               class="rounded mb-2"
               style="max-width: 250px; max-height: 180px; object-fit: cover;"
             >
@@ -31,8 +64,8 @@
           </div>
 
           <div>
-            <label for="price">Price (per night)</label>
-            <input type="number" id="price" name="listing[price]" value="<%= listing.price %>" placeholder="Price" required min="0">
+            <label for="price">Hourly pay</label>
+            <input type="number" id="price" name="listing[price]" value="<%= listing.price %>" placeholder="150" required min="0">
           </div>
 
           <div style="position:relative;">
@@ -58,8 +91,8 @@
           <% } %>
 
           <div class="col-12" style="margin-top:16px;">
-            <button class="btn" type="submit">Update Listing</button>
-            <a class="btn btn-outline-secondary ms-2" href="/listings/<%= listing._id %>">Back to listing</a>
+            <button class="btn" type="submit">Update Shift</button>
+            <a class="btn btn-outline-secondary ms-2" href="/listings/<%= listing._id %>">Back to shift</a>
           </div>
         </form>
       </div>
